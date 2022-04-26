@@ -160,7 +160,7 @@ class TestPayrollAccount(common.TransactionCase):
             "section_id": False,
             "active_id": self.payslip_action_id,
         }
-        self.hr_payslip.with_context(context).compute_sheet()
+        self.hr_payslip.with_context(**context).compute_sheet()
 
         # I want to check cancel button.
         # So I first cancel the sheet then make it set to draft.

@@ -70,6 +70,7 @@ class HrPayslip(models.Model):
             or (not self.contract_id and self.default_get(["journal_id"])["journal_id"])
             or self.journal_id
         )
+        return
 
     def action_payslip_cancel(self):
         moves = self.mapped("move_id")
