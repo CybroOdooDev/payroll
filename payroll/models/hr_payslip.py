@@ -548,7 +548,7 @@ class HrPayslip(models.Model):
         locale = self.env.context.get("lang") or "en_US"
         res["value"].update(
             {
-                "name": _("%((Salary Slip of )s for )s")
+                "name": _("Salary Slip of %()s for %()s")
                 % (
                     employee.name,
                     tools.ustr(
@@ -608,7 +608,7 @@ class HrPayslip(models.Model):
 
         ttyme = datetime.combine(date_from, time.min)
         locale = self.env.context.get("lang") or "en_US"
-        self.name = _("%((Salary Slip of )s for )s") % (
+        self.name = _("Salary Slip of %()s for %()s") % (
             employee.name,
             tools.ustr(
                 babel.dates.format_date(date=ttyme, format="MMMM-y", locale=locale)

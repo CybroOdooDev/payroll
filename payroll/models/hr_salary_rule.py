@@ -136,7 +136,7 @@ class HrSalaryRule(models.Model):
         help="Eventual third party involved in the salary payment of the employees.",
     )
     input_ids = fields.One2many("hr.rule.input", "input_id", string="Inputs", copy=True)
-    note = fields.Text(string="Description")
+    note = fields.Text(string="Description", tracking=True)
 
     @api.constrains("parent_rule_id")
     def _check_parent_rule_id(self):
@@ -172,11 +172,14 @@ class HrSalaryRule(models.Model):
                     float(safe_eval(self.quantity, localdict)),
                     100.0,
                 )
-            except Exception:
+            except Exception as err:
                 raise UserError(
-                    _("%((Wrong quantity defined for salary rule )s )s.")
-                    % (self.name, self.code)
-                )
+                    _(
+                        "Wrong quantity defined for salary rule %(name)s %(code)s.",
+                        name=self.name,
+                        code=self.code,
+                    )
+                ) from err
         elif self.amount_select == "percentage":
             try:
                 return (
@@ -184,14 +187,15 @@ class HrSalaryRule(models.Model):
                     float(safe_eval(self.quantity, localdict)),
                     self.amount_percentage,
                 )
-            except Exception:
+            except Exception as err:
                 raise UserError(
                     _(
                         "Wrong percentage base or quantity defined for salary "
-                        "%(rule )s %()s."
+                        "rule %(name)s %(code)s.",
+                        name=self.name,
+                        code=self.code,
                     )
-                    % (self.name, self.code)
-                )
+                ) from err
         else:
             try:
                 safe_eval(
@@ -205,15 +209,17 @@ class HrSalaryRule(models.Model):
             except Exception as ex:
                 raise UserError(
                     _(
-                        """%(((
-Wrong python code defined for salary rule )s )s.
-Here is the error received:
+                        """
+                        Wrong python code defined for salary rule %(name)s %(code)s.
+                        Here is the error received:
 
-)s
-"""
+                        %(repr)s
+                        """,
+                        name=self.name,
+                        code=self.code,
+                        repr=repr(ex),
                     )
-                    % (self.name, self.code, repr(ex))
-                )
+                ) from ex
 
     def _satisfy_condition(self, localdict):
         """
@@ -232,11 +238,14 @@ Here is the error received:
                     self.condition_range_min <= result <= self.condition_range_max
                     or False
                 )
-            except Exception:
+            except Exception as err:
                 raise UserError(
-                    _("%((Wrong range condition defined for salary rule )s )s.")
-                    % (self.name, self.code)
-                )
+                    _(
+                        "Wrong range condition defined for salary rule %(name)s %(code)s.",
+                        name=self.name,
+                        code=self.code,
+                    )
+                ) from err
         else:  # python code
             try:
                 safe_eval(self.condition_python, localdict, mode="exec", nocopy=True)
@@ -244,12 +253,14 @@ Here is the error received:
             except Exception as ex:
                 raise UserError(
                     _(
-                        """%(((
-Wrong python condition defined for salary rule )s )s.
-Here is the error received:
+                        """
+                            Wrong python condition defined for salary rule %(name)s %(code)s.
+                            Here is the error received:
 
-)s
-"""
+                            %(repr)s
+                        """,
+                        name=self.name,
+                        code=self.code,
+                        repr=repr(ex),
                     )
-                    % (self.name, self.code, repr(ex))
-                )
+                ) from ex
