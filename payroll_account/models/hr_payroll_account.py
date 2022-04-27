@@ -118,20 +118,20 @@ class HrPayslip(models.Model):
                     ]
                     tax_tag_ids = (
                         self.env["account.tax.repartition.line"]
-                        .search(
+                            .search(
                             [
                                 ("invoice_tax_id", "in", account_tax_ids),
                                 ("repartition_type", "=", "base"),
                             ]
                         )
-                        .tag_ids
+                            .tag_ids
                     )
 
                 tax_repartition_line_id = False
                 if line.salary_rule_id.account_tax_id:
                     tax_repartition_line_id = (
                         self.env["account.tax.repartition.line"]
-                        .search(
+                            .search(
                             [
                                 (
                                     "invoice_tax_id",
@@ -141,11 +141,11 @@ class HrPayslip(models.Model):
                                 ("account_id", "=", account_id),
                             ]
                         )
-                        .id
+                            .id
                     )
                     tax_tag_ids = (
                         self.env["account.tax.repartition.line"]
-                        .search(
+                            .search(
                             [
                                 (
                                     "invoice_tax_id",
@@ -156,7 +156,7 @@ class HrPayslip(models.Model):
                                 ("account_id", "=", account_id),
                             ]
                         )
-                        .tag_ids
+                            .tag_ids
                     )
 
                 if debit_account_id:
@@ -166,14 +166,14 @@ class HrPayslip(models.Model):
                         {
                             "name": line.name,
                             "partner_id": line._get_partner_id(credit_account=False)
-                            or slip.employee_id.address_home_id.id,
+                                          or slip.employee_id.address_home_id.id,
                             "account_id": debit_account_id,
                             "journal_id": slip.journal_id.id,
                             "date": date,
                             "debit": amount > 0.0 and amount or 0.0,
                             "credit": amount < 0.0 and -amount or 0.0,
                             "analytic_account_id": analytic_salary_id
-                            or slip.contract_id.analytic_account_id.id,
+                                                   or slip.contract_id.analytic_account_id.id,
                             "tax_line_id": line.salary_rule_id.account_tax_id.id,
                             "tax_ids": tax_ids,
                             "tax_repartition_line_id": tax_repartition_line_id,
@@ -190,14 +190,14 @@ class HrPayslip(models.Model):
                         {
                             "name": line.name,
                             "partner_id": line._get_partner_id(credit_account=True)
-                            or slip.employee_id.address_home_id.id,
+                                          or slip.employee_id.address_home_id.id,
                             "account_id": credit_account_id,
                             "journal_id": slip.journal_id.id,
                             "date": date,
                             "debit": amount < 0.0 and -amount or 0.0,
                             "credit": amount > 0.0 and amount or 0.0,
                             "analytic_account_id": analytic_salary_id
-                            or slip.contract_id.analytic_account_id.id,
+                                                   or slip.contract_id.analytic_account_id.id,
                             "tax_line_id": line.salary_rule_id.account_tax_id.id,
                             "tax_ids": tax_ids,
                             "tax_repartition_line_id": tax_repartition_line_id,
