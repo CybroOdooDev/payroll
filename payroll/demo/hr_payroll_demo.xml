@@ -36,7 +36,7 @@
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = contract.wage
+            result = contract.wage
         </field>
     </record>
     <record id="hr_rule_taxable" model="hr.salary.rule">
@@ -47,7 +47,7 @@ result = contract.wage
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = categories.BASIC + categories.ALW
+            result = categories.BASIC + categories.ALW
         </field>
     </record>
     <record id="hr_rule_net" model="hr.salary.rule">
@@ -58,7 +58,7 @@ result = categories.BASIC + categories.ALW
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = categories.BASIC + categories.ALW + categories.DED
+            result = categories.BASIC + categories.ALW + categories.DED
         </field>
         <field name="register_id" ref="contrib_register_employees" />
     </record>
@@ -150,8 +150,8 @@ result = categories.BASIC + categories.ALW + categories.DED
         <field name="name">Get 1% of sales</field>
         <field name="sequence" eval="17" />
         <field name="amount_python_compute">
-result = ((inputs.SALEURO and inputs.SALEURO.amount) + (inputs.SALASIA and
-inputs.SALASIA.amount)) * 0.01
+            result = ((inputs.SALEURO and inputs.SALEURO.amount) + (inputs.SALASIA and
+            inputs.SALASIA.amount)) * 0.01
         </field>
     </record>
     <!-- Rule Inputs -->
